@@ -21,7 +21,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.plugin.common.BinaryMessenger
 import java.math.BigInteger
 import java.security.*
 import java.security.interfaces.*
@@ -40,6 +40,15 @@ class CryptographyFlutterPlugin : FlutterPlugin, MethodCallHandler {
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+    }
+
+    companion object {
+        @JvmStatic
+        fun registerWith(messenger: BinaryMessenger) {
+            val channel = MethodChannel(messenger, "cryptography_flutter")
+            val plugin = CryptographyFlutterPlugin()
+            channel.setMethodCallHandler(plugin)
+        }
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
